@@ -100,10 +100,6 @@ adapter.onTurnError = async (context, error) => {
 server.post('/api/messages', (req, res) => {
     adapter.processActivity(req, res, async (context) => {
         // Route to main dialog.
-        await context.sendActivities([
-            { type: 'typing' },
-            { type: 'delay', value: 1000 }
-         ])
         await myBot.onTurn(context);
     });
 
