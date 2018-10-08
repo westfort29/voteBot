@@ -49,6 +49,8 @@ export class MyBot {
       }
       let userInput = turnContext.activity.text.split('!% ');
       let command = userInput[0].trim();
+      let commandA = command.split(' ');
+      command = commandA[commandA.length - 1];
       switch(command) {
         case VOTE_COMMANDS.START: {
           await this.startVoting(userInput, votingConfig, turnContext);
