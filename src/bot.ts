@@ -64,6 +64,7 @@ export class MyBot {
           if (votingConfig.isActive) {
             votingConfig.isActive = false;
             await turnContext.sendActivity(`Votings about "${votingConfig.topic}" is finished`);
+            await this.handleResult(votingConfig, turnContext);
           } else {
             await turnContext.sendActivity(`No votings to finish`);
           }
@@ -112,9 +113,9 @@ export class MyBot {
       votingOptions.votedUsersId = [];
       let optionsList = '';
       for (let option in currentVotingConfig.options) {
-        optionsList += '\n *' + currentVotingConfig.options[option].id + '* is an id for ' + currentVotingConfig.options[option].name;
+        optionsList += '\n ' + currentVotingConfig.options[option].id + ' is an id for ' + currentVotingConfig.options[option].name;
       }
-      await turnContext.sendActivity(`The voting about "${topic}" has started! \n To vote for your option type "vote!% *option_number*". \n${optionsList}`);
+      await turnContext.sendActivity(`The voting about "${topic}" has started! \n To vote for your option type "vote!% *option_number*". \n ${optionsList}`);
 
     } else {
       await turnContext.sendActivity(`Not enough data to start voting`);
@@ -128,7 +129,7 @@ export class MyBot {
       let wonOptionsId = [];
       for (let option in votingConfig.options) {
         let optionVotesCount = votingConfig.options[option].votesCount
-        resultString += '\n' + votingConfig.options[option].name + ' has ' + optionVotesCount + ' votes';
+        resultString += '\n ' + votingConfig.options[option].name + ' has ' + optionVotesCount + ' votes';
         if (maxVotesCount < optionVotesCount) {
           wonOptionsId = [option];
           maxVotesCount = optionVotesCount;
@@ -136,11 +137,11 @@ export class MyBot {
           wonOptionsId.push(option);
         }
       };
-      let wonAnounseString = '\n';
+      let wonAnounseString = '\n ';
       if (wonOptionsId.length > 1) {
-        wonAnounseString += 'Unfortunatly some of results have same amount of votes. You can reopen current voting or start a new one.';
+        wonAnounseString += '\n Unfortunatly some of results have same amount of votes. You can reopen current voting or start a new one.';
       } else {
-        wonAnounseString += '\n"*' + votingConfig.options[wonOptionsId[0]].name + '*"' + ' have won with ' + votingConfig.options[wonOptionsId[0]].votesCount + ' votes';
+        wonAnounseString += '\n "' + votingConfig.options[wonOptionsId[0]].name + '"' + ' have won with ' + votingConfig.options[wonOptionsId[0]].votesCount + ' votes';
       }
       await turnContext.sendActivity(`The results of the voting about "${votingConfig.topic}" are: ${resultString} ${wonAnounseString}`);
     } else {
