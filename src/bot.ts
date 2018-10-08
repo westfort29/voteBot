@@ -11,7 +11,8 @@ enum VOTE_COMMANDS {
   'FINISH' = 'finish',
   'VOTE' = 'vote',
   'LAST_RESULT' = 'result',
-  'REOPEN' = 'reopen'
+  'REOPEN' = 'reopen',
+  'RATE' = 'rate'
 }
 
 interface IVotingConfig {
@@ -63,7 +64,7 @@ export class MyBot {
         case VOTE_COMMANDS.FINISH: {
           if (votingConfig.isActive) {
             votingConfig.isActive = false;
-            await turnContext.sendActivity(`Votings about "${votingConfig.topic}" is finished`);
+            await turnContext.sendActivity(`Votings about "${votingConfig.topic}" has finished`);
             await this.handleResult(votingConfig, turnContext);
           } else {
             await turnContext.sendActivity(`No votings to finish`);
@@ -80,6 +81,15 @@ export class MyBot {
             await turnContext.sendActivity(`Voting is continuing`);
           } else {
             await turnContext.sendActivity(`No voting to reopen`);
+          }
+          break;
+        }
+        case VOTE_COMMANDS.RATE: {
+          let ratingSubject = userInput[1].trim();
+          if (ratingSubject) {
+            await turnContext.sendActivity(`I rate ${ratingSubject} by ${Math.floor(Math.random() * 11)} from 10`);
+          } else {
+            await turnContext.sendActivity(`Nothing to rate`);
           }
           break;
         }
@@ -164,7 +174,7 @@ export class MyBot {
       
     } else if (isUserVoted) {
       let userNameOrId = turnContext.activity.from.name || votingUsersId
-      await turnContext.sendActivity(`${userNameOrId} is a cheater, he tried to vote twice`);
+      await turnContext.sendActivity(`${userNameOrId} is a cheater, he have tried to vote twice`);
     }
   }
 }
