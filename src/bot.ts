@@ -109,6 +109,7 @@ export class MyBot {
           votesCount: 0
         }
       });
+      votingOptions.votedUsersId = [];
       let optionsList = '';
       for (let option in currentVotingConfig.options) {
         optionsList += '\n *' + currentVotingConfig.options[option].id + '* is an id for ' + currentVotingConfig.options[option].name;
