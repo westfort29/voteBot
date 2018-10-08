@@ -92,6 +92,9 @@ export class MyBot {
             if (rating === 10) {
               ratingAnswer += `\n ${ratingSubject} is nice!`
             }
+            if (rating === 0) {
+              ratingAnswer += `\n ${ratingSubject} sucks!`
+            }
             await turnContext.sendActivity(ratingAnswer);
           } else {
             await turnContext.sendActivity(`Nothing to rate`);
