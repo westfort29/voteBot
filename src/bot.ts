@@ -87,7 +87,12 @@ export class MyBot {
         case VOTE_COMMANDS.RATE: {
           let ratingSubject = userInput[1].trim();
           if (ratingSubject) {
-            await turnContext.sendActivity(`I rate ${ratingSubject} by ${Math.floor(Math.random() * 11)} from 10`);
+            let rating = Math.floor(Math.random() * 11);
+            let ratingAnswer = `I rate ${ratingSubject} by ${rating} from 10`;
+            if (rating === 10) {
+              ratingAnswer += `\n ${ratingSubject} is nice!`
+            }
+            await turnContext.sendActivity(ratingAnswer);
           } else {
             await turnContext.sendActivity(`Nothing to rate`);
           }
