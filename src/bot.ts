@@ -153,8 +153,13 @@ export class MyBot {
     let isUserVoted =  votingConfig.votedUsersId.some(userId => userId == votingUsersId)
     if (votedOptionId && !isUserVoted) {
       votedOptionId = parseInt(votedOptionId);
-      votingConfig.options[votedOptionId].votesCount++;
-      votingConfig.votedUsersId.push(votingUsersId);
+      if (votingConfig.options[votedOptionId]) {
+        votingConfig.options[votedOptionId].votesCount++;
+        votingConfig.votedUsersId.push(votingUsersId);
+      } else {
+        await turnContext.sendActivity(`There is no such option`);
+      }
+      
     } else if (isUserVoted) {
       let userNameOrId = turnContext.activity.from.name || votingUsersId
       await turnContext.sendActivity(`${userNameOrId} is a cheater, he tried to vote twice`);
