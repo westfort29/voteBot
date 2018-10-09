@@ -1,9 +1,7 @@
-import { TurnContext } from "botbuilder";
-
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-const { ActivityTypes } = require('botbuilder');
+import { TurnContext, ActivityTypes, MessageFactory, CardFactory } from 'botbuilder';
 
 const VOTING_PROPERTY = 'votingConfigProperty';
 enum VOTE_COMMANDS {
@@ -46,6 +44,29 @@ export class MyBot {
     return command;
   }
 
+  async makeOptionCards(votingConfig: IVotingConfig) {
+    let cards = [];
+    for (let option in votingConfig.options) {
+      cards.push(
+        CardFactory.heroCard(
+          votingConfig.options[option].name,
+          [],
+          [
+            {
+              type: 'postBack',
+              title: 'vote!',
+              value: `vote!% ${votingConfig.options[option].id}`,
+              text: 'I have voted',
+              displayText: 'I have voted'
+            }
+          ]
+        )
+      );
+    }
+    let cardsMessage = MessageFactory.list(cards);
+    return cardsMessage;
+  }
+
   async onTurn(turnContext: TurnContext) {
     if (turnContext.activity.type === ActivityTypes.Message) {
       let votingConfig: IVotingConfig = await this.votingConfig.get(turnContext);
@@ -57,6 +78,7 @@ export class MyBot {
           votedUsersId: []
         }
       }
+
       let userInput = turnContext.activity.text.split('!%');
       let command = await this.detectCommand(userInput);
       switch(command) {
@@ -128,13 +150,14 @@ export class MyBot {
         optionsList += '\n\n ' + currentVotingConfig.options[option].id + ' is an id for ' + currentVotingConfig.options[option].name;
       }
       await turnContext.sendActivity(`The voting about "${topic}" has started! \n\n To vote for your option type "vote!% *option_number*". \n\n ${optionsList}`);
+      await turnContext.sendActivity(await this.makeOptionCards(currentVotingConfig));
 
     } else {
       await turnContext.sendActivity(`Not enough data to start voting`);
     }
   }
 
-  async handleResult(votingConfig, turnContext) {
+  async handleResult(votingConfig: IVotingConfig, turnContext) {
     if (votingConfig.topic) {
       let resultString = '';
       let maxVotesCount = 0;
@@ -153,7 +176,8 @@ export class MyBot {
       if (wonOptionsId.length > 1) {
         wonAnounseString += '\n\n Unfortunatly some of results have same amount of votes. You can reopen current voting or start a new one.';
       } else {
-        wonAnounseString += '\n\n "' + votingConfig.options[wonOptionsId[0]].name + '"' + ' have won with ' + votingConfig.options[wonOptionsId[0]].votesCount + ' votes';
+        let winStatus = votingConfig.isActive ? ' is winning ' : ' have won ';
+        wonAnounseString += '\n\n "' + votingConfig.options[wonOptionsId[0]].name + '"' + winStatus + 'with ' + votingConfig.options[wonOptionsId[0]].votesCount + ' votes';
       }
       await turnContext.sendActivity(`The results of the voting about "${votingConfig.topic}" are: ${resultString} ${wonAnounseString}`);
     } else {
