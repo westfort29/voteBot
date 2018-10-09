@@ -37,6 +37,14 @@ export class MyBot {
    *
    * @param {TurnContext} on turn context object.
    */
+
+  async detectCommand(userInput: any[]) {
+    let command = userInput[0].trim();
+    let commandA = command.split(' ');
+    command = commandA[commandA.length - 1].toLowerCase();
+    return command;
+  }
+
   async onTurn(turnContext: TurnContext) {
     if (turnContext.activity.type === ActivityTypes.Message) {
       let votingConfig: IVotingConfig = await this.votingConfig.get(turnContext);
@@ -49,9 +57,7 @@ export class MyBot {
         }
       }
       let userInput = turnContext.activity.text.split('!% ');
-      let command = userInput[0].trim();
-      let commandA = command.split(' ');
-      command = commandA[commandA.length - 1].toLowerCase();
+      let command = await this.detectCommand(userInput);
       switch(command) {
         case VOTE_COMMANDS.START: {
           await this.startVoting(userInput, votingConfig, turnContext);
@@ -85,20 +91,7 @@ export class MyBot {
           break;
         }
         case VOTE_COMMANDS.RATE: {
-          let ratingSubject = userInput[1].trim();
-          if (ratingSubject) {
-            let rating = Math.floor(Math.random() * 11);
-            let ratingAnswer = `I rate ${ratingSubject} by ${rating} from 10.`;
-            if (rating === 10) {
-              ratingAnswer += `\n\n ${ratingSubject} is nice!`
-            }
-            if (rating === 0) {
-              ratingAnswer += `\n\n ${ratingSubject} sucks!`
-            }
-            await turnContext.sendActivity(ratingAnswer);
-          } else {
-            await turnContext.sendActivity(`Nothing to rate`);
-          }
+          this.handleRate(userInput, turnContext);
           break;
         }
         default: {
@@ -113,7 +106,7 @@ export class MyBot {
     await this.conversationState.saveChanges(turnContext);
   }
 
-  async startVoting(userInputConfig, currentVotingConfig, turnContext) {
+  async startVoting(userInputConfig: any[], currentVotingConfig: IVotingConfig, turnContext) {
     let topic = userInputConfig[1];
     if (currentVotingConfig.isActive) {
       await turnContext.sendActivity(`There is an active votig. You have to finish it to start the new one!`);
@@ -128,7 +121,7 @@ export class MyBot {
           votesCount: 0
         }
       });
-      votingOptions.votedUsersId = [];
+      currentVotingConfig.votedUsersId = [];
       let optionsList = '';
       for (let option in currentVotingConfig.options) {
         optionsList += '\n\n ' + currentVotingConfig.options[option].id + ' is an id for ' + currentVotingConfig.options[option].name;
@@ -183,6 +176,23 @@ export class MyBot {
     } else if (isUserVoted) {
       let userNameOrId = turnContext.activity.from.name || votingUsersId
       await turnContext.sendActivity(`${userNameOrId} is a cheater, he have tried to vote twice`);
+    }
+  }
+  
+  async handleRate(userInput, turnContext) {
+    let ratingSubject = userInput[1].trim();
+    if (ratingSubject) {
+      let rating = Math.floor(Math.random() * 11);
+      let ratingAnswer = `I rate ${ratingSubject} by ${rating} from 10.`;
+      if (rating === 10) {
+        ratingAnswer += `\n\n ${ratingSubject} is nice!`
+      }
+      if (rating === 0) {
+        ratingAnswer += `\n\n ${ratingSubject} sucks!`
+      }
+      await turnContext.sendActivity(ratingAnswer);
+    } else {
+      await turnContext.sendActivity(`Nothing to rate`);
     }
   }
 }
