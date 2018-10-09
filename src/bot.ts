@@ -10,7 +10,8 @@ enum VOTE_COMMANDS {
   'VOTE' = 'vote',
   'LAST_RESULT' = 'result',
   'REOPEN' = 'reopen',
-  'RATE' = 'rate'
+  'RATE' = 'rate',
+  'HELP' = 'help'
 }
 
 interface IVotingConfig {
@@ -67,6 +68,17 @@ export class MyBot {
     return cardsMessage;
   }
 
+  async giveHelp(turnContext) {
+    await turnContext.sendActivity(`
+      Hi. I support the following commands^ \n\n
+      to start voting — start!% voting_topic!% voting_option!% voting_option2 etc \n\n
+      to finish voting, it will marm voting as not active, which means that no one can't vote anymore — finish \n\n
+      to reopen voting — reopen
+      to see result, even for not finished voting, but it won't mark voting as finished — result \n\n
+      to ask bot rate something — rate!% thing_you_want_to_rate
+    `);
+  }
+
   async onTurn(turnContext: TurnContext) {
     if (turnContext.activity.type === ActivityTypes.Message) {
       let votingConfig: IVotingConfig = await this.votingConfig.get(turnContext);
@@ -82,6 +94,10 @@ export class MyBot {
       let userInput = turnContext.activity.text.split('!%');
       let command = await this.detectCommand(userInput);
       switch(command) {
+        case VOTE_COMMANDS.HELP: {
+          await this.giveHelp(turnContext);
+          break;
+        }
         case VOTE_COMMANDS.START: {
           await this.startVoting(userInput, votingConfig, turnContext);
           break;
