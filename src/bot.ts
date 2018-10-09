@@ -188,7 +188,7 @@ export class MyBot {
     let ratingSubject = userInput[1].trim();
     if (ratingSubject) {
       let rating = Math.floor(Math.random() * 11);
-      let ratingAnswer = ratingSubject.toLowerCase().trim() === this.botName ? 10 : `I rate ${ratingSubject} by ${rating} from 10.`;
+      let ratingAnswer = ratingSubject.toLowerCase().trim() === this.botName ? `I rate ${ratingSubject} by 10 from 10.` : `I rate ${ratingSubject} by ${rating} from 10.`;
       if (rating === 10) {
         ratingAnswer += `\n\n ${ratingSubject} is very nice!`
       }
