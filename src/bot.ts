@@ -70,11 +70,11 @@ export class MyBot {
 
   async giveHelp(turnContext) {
     await turnContext.sendActivity(`
-      Hi. I support the following commands^ \n\n
-      to start voting — start!% voting_topic!% voting_option!% voting_option2 etc \n\n
-      to finish voting, it will marm voting as not active, which means that no one can't vote anymore — finish \n\n
+      Hi. I support the following commands
+      to start voting — start!% voting_topic!% voting_option!% voting_option2 etc
+      to finish voting, it will marm voting as not active, which means that no one can't vote anymore — finish
       to reopen voting — reopen
-      to see result, even for not finished voting, but it won't mark voting as finished — result \n\n
+      to see result, even for not finished voting, but it won't mark voting as finished — result
       to ask bot rate something — rate!% thing_you_want_to_rate
     `);
   }
