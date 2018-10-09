@@ -140,7 +140,7 @@ export class MyBot {
       let wonOptionsId = [];
       for (let option in votingConfig.options) {
         let optionVotesCount = votingConfig.options[option].votesCount
-        resultString += '\n\n ' + votingConfig.options[option].name + ' has ' + optionVotesCount + ' votes';
+        resultString += '\n\n ' + votingConfig.options[option].name + ' has ' + optionVotesCount + ' vote(s)';
         if (maxVotesCount < optionVotesCount) {
           wonOptionsId = [option];
           maxVotesCount = optionVotesCount;
