@@ -88,12 +88,12 @@ export class MyBot {
           let ratingSubject = userInput[1].trim();
           if (ratingSubject) {
             let rating = Math.floor(Math.random() * 11);
-            let ratingAnswer = `I rate ${ratingSubject} by ${rating} from 10`;
+            let ratingAnswer = `I rate ${ratingSubject} by ${rating} from 10.`;
             if (rating === 10) {
-              ratingAnswer += `\n ${ratingSubject} is nice!`
+              ratingAnswer += `\n\n ${ratingSubject} is nice!`
             }
             if (rating === 0) {
-              ratingAnswer += `\n ${ratingSubject} sucks!`
+              ratingAnswer += `\n\n ${ratingSubject} sucks!`
             }
             await turnContext.sendActivity(ratingAnswer);
           } else {
@@ -131,9 +131,9 @@ export class MyBot {
       votingOptions.votedUsersId = [];
       let optionsList = '';
       for (let option in currentVotingConfig.options) {
-        optionsList += '\n ' + currentVotingConfig.options[option].id + ' is an id for ' + currentVotingConfig.options[option].name;
+        optionsList += '\n\n ' + currentVotingConfig.options[option].id + ' is an id for ' + currentVotingConfig.options[option].name;
       }
-      await turnContext.sendActivity(`The voting about "${topic}" has started! \n To vote for your option type "vote!% *option_number*". \n ${optionsList}`);
+      await turnContext.sendActivity(`The voting about "${topic}" has started! \n\n To vote for your option type "vote!% *option_number*". \n\n ${optionsList}`);
 
     } else {
       await turnContext.sendActivity(`Not enough data to start voting`);
@@ -147,7 +147,7 @@ export class MyBot {
       let wonOptionsId = [];
       for (let option in votingConfig.options) {
         let optionVotesCount = votingConfig.options[option].votesCount
-        resultString += '\n ' + votingConfig.options[option].name + ' has ' + optionVotesCount + ' votes';
+        resultString += '\n\n ' + votingConfig.options[option].name + ' has ' + optionVotesCount + ' votes';
         if (maxVotesCount < optionVotesCount) {
           wonOptionsId = [option];
           maxVotesCount = optionVotesCount;
@@ -155,11 +155,11 @@ export class MyBot {
           wonOptionsId.push(option);
         }
       };
-      let wonAnounseString = '\n ';
+      let wonAnounseString = '\n\n ';
       if (wonOptionsId.length > 1) {
-        wonAnounseString += '\n Unfortunatly some of results have same amount of votes. You can reopen current voting or start a new one.';
+        wonAnounseString += '\n\n Unfortunatly some of results have same amount of votes. You can reopen current voting or start a new one.';
       } else {
-        wonAnounseString += '\n "' + votingConfig.options[wonOptionsId[0]].name + '"' + ' have won with ' + votingConfig.options[wonOptionsId[0]].votesCount + ' votes';
+        wonAnounseString += '\n\n "' + votingConfig.options[wonOptionsId[0]].name + '"' + ' have won with ' + votingConfig.options[wonOptionsId[0]].votesCount + ' votes';
       }
       await turnContext.sendActivity(`The results of the voting about "${votingConfig.topic}" are: ${resultString} ${wonAnounseString}`);
     } else {
