@@ -57,7 +57,7 @@ export class MyBot {
           votedUsersId: []
         }
       }
-      let userInput = turnContext.activity.text.split('!% ');
+      let userInput = turnContext.activity.text.split('!%');
       let command = await this.detectCommand(userInput);
       switch(command) {
         case VOTE_COMMANDS.START: {
@@ -108,17 +108,17 @@ export class MyBot {
   }
 
   async startVoting(userInputConfig: any[], currentVotingConfig: IVotingConfig, turnContext) {
-    let topic = userInputConfig[1];
+    let topic = userInputConfig[1].trim();
     if (currentVotingConfig.isActive) {
       await turnContext.sendActivity(`There is an active votig. You have to finish it to start the new one!`);
-    } else if (topic && userInputConfig[2] && userInputConfig[3]) {
+    } else if (topic && userInputConfig[2] && userInputConfig[2].trim() && userInputConfig[3] && userInputConfig[3].trim()) {
       currentVotingConfig.isActive = true;
       currentVotingConfig.topic = topic;
       let votingOptions = userInputConfig.slice(2);
       votingOptions.forEach((element, index) => {
         currentVotingConfig.options[index] = {
           id: index,
-          name: element,
+          name: element.trim(),
           votesCount: 0
         }
       });
