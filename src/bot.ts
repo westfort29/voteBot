@@ -185,10 +185,10 @@ export class MyBot {
       let rating = Math.floor(Math.random() * 11);
       let ratingAnswer = `I rate ${ratingSubject} by ${rating} from 10.`;
       if (rating === 10) {
-        ratingAnswer += `\n\n ${ratingSubject} is nice!`
+        ratingAnswer += `\n\n ${ratingSubject} is very nice!`
       }
       if (rating === 0) {
-        ratingAnswer += `\n\n ${ratingSubject} sucks!`
+        ratingAnswer += `\n\n ${ratingSubject} sucks! Awful!`
       }
       await turnContext.sendActivity(ratingAnswer);
     } else {
