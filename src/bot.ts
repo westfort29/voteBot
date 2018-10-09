@@ -25,6 +25,7 @@ interface IVotingConfig {
 export class MyBot {
     public conversationState;
     public votingConfig;
+    public botName = 'vote bot'
   /**
    *
    * @param {ConversationState} conversation state object
@@ -160,22 +161,26 @@ export class MyBot {
     }
   }
 
-  async handleVote(userInput, votingConfig, turnContext) {
-    let votedOptionId = userInput[1].trim();
-    let votingUsersId = turnContext.activity.from.id;
-    let isUserVoted =  votingConfig.votedUsersId.some(userId => userId == votingUsersId)
-    if (votedOptionId && !isUserVoted) {
-      votedOptionId = parseInt(votedOptionId);
-      if (votingConfig.options[votedOptionId]) {
-        votingConfig.options[votedOptionId].votesCount++;
-        votingConfig.votedUsersId.push(votingUsersId);
-      } else {
-        await turnContext.sendActivity(`There is no such option`);
+  async handleVote(userInput: any[], votingConfig: IVotingConfig, turnContext) {
+    if (votingConfig.isActive) {
+      let votedOptionId = userInput[1].trim();
+      let votingUsersId = turnContext.activity.from.id;
+      let isUserVoted =  votingConfig.votedUsersId.some(userId => userId == votingUsersId)
+      if (votedOptionId && !isUserVoted) {
+        votedOptionId = parseInt(votedOptionId);
+        if (votingConfig.options[votedOptionId]) {
+          votingConfig.options[votedOptionId].votesCount++;
+          votingConfig.votedUsersId.push(votingUsersId);
+        } else {
+          await turnContext.sendActivity(`There is no such option`);
+        }
+        
+      } else if (isUserVoted) {
+        let userNameOrId = turnContext.activity.from.name || votingUsersId
+        await turnContext.sendActivity(`${userNameOrId} is a cheater, he have tried to vote twice`);
       }
-      
-    } else if (isUserVoted) {
-      let userNameOrId = turnContext.activity.from.name || votingUsersId
-      await turnContext.sendActivity(`${userNameOrId} is a cheater, he have tried to vote twice`);
+    } else {
+      await turnContext.sendActivity(`There is no active voting`);
     }
   }
   
@@ -183,7 +188,7 @@ export class MyBot {
     let ratingSubject = userInput[1].trim();
     if (ratingSubject) {
       let rating = Math.floor(Math.random() * 11);
-      let ratingAnswer = `I rate ${ratingSubject} by ${rating} from 10.`;
+      let ratingAnswer = ratingSubject.toLowerCase().trim() === this.botName ? 10 : `I rate ${ratingSubject} by ${rating} from 10.`;
       if (rating === 10) {
         ratingAnswer += `\n\n ${ratingSubject} is very nice!`
       }
