@@ -40,7 +40,7 @@ export async function getImage(query: string) {
     }
   });
 
-  return await (res.data.value[0] && res.data.value[0].url || '');
+  return await (res.data.value[0] && res.data.value[0].url || '').catch(()=>'');
 }
 
 function normalizeQuery(query: string): string {
