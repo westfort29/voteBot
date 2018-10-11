@@ -156,10 +156,12 @@ export class MyBot {
       currentVotingConfig.topic = topic;
       let votingOptions = userInputConfig.slice(2);
       votingOptions.forEach((element, index) => {
-        currentVotingConfig.options[index] = {
-          id: index,
-          name: element.trim(),
-          votesCount: 0
+        if(element.trim()){
+          currentVotingConfig.options[index] = {
+            id: index,
+            name: element.trim(),
+            votesCount: 0
+          }
         }
       });
       currentVotingConfig.votedUsersId = [];
