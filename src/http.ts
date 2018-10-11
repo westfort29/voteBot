@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const IMG_API_KEY = process.env.IMG_API_MASHAPE_KEY || 'vCZua7FQOHmshDmwmPLuOVEvxBJPp1vNDd5jsn9m38Zu8v89Bb';
+const IMG_API_KEY = process.env.IMG_API_MASHAPE_KEY || '';
 const URL = "https://contextualwebsearch-websearch-v1.p.mashape.com/api/Search/ImageSearchAPI?count=1&autoCorrect=true&q="
 
 interface IFTImageResponse {
