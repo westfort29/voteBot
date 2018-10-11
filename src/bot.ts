@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { TurnContext, ActivityTypes, MessageFactory, CardFactory } from 'botbuilder';
+import { getImage } from './http';
 
 const VOTING_PROPERTY = 'votingConfigProperty';
 enum VOTE_COMMANDS {
@@ -48,10 +49,11 @@ export class MyBot {
   async makeOptionCards(votingConfig: IVotingConfig) {
     let cards = [];
     for (let option in votingConfig.options) {
+      let img = await getImage(votingConfig.options[option].name);
       cards.push(
         CardFactory.heroCard(
           votingConfig.options[option].name,
-          [],
+          [img],
           [
             {
               type: 'postBack',
@@ -65,7 +67,7 @@ export class MyBot {
       );
     }
     let cardsMessage = MessageFactory.list(cards);
-    return cardsMessage;
+    return await cardsMessage;
   }
 
   async giveHelp(turnContext) {
