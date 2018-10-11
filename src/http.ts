@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const IMG_API_KEY = process.env.IMG_API_MASHAPE_KEY || '';
+const IMG_API_KEY = process.env.IMG_API_MASHAPE_KEY || 'vCZua7FQOHmshDmwmPLuOVEvxBJPp1vNDd5jsn9m38Zu8v89Bb';
 const URL = "https://contextualwebsearch-websearch-v1.p.mashape.com/api/Search/ImageSearchAPI?count=1&autoCorrect=true&q="
 
 interface IFTImageResponse {
@@ -20,7 +20,6 @@ interface IFTImage {
 
 export async function getImage(query: string) {
   let url = URL + normalizeQuery(query);
-
   try {
     const res = await axios(
       {
@@ -31,17 +30,9 @@ export async function getImage(query: string) {
         },
         url: url
       }
-    ).catch((e) => {
-      return {
-        data: {
-          value: [
-            {url: ''}
-          ]
-        }
-      }
-    });
+    )
 
-    return await (res.data.value[0] && res.data.value[0].url || '').catch(()=>'');
+    return await (res.data.value[0] && res.data.value[0].url);
   } catch(e) {
     console.log(e);
     return '';
