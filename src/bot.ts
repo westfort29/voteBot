@@ -49,7 +49,7 @@ export class MyBot {
   async makeOptionCards(votingConfig: IVotingConfig) {
     let cards = [];
     for (let option in votingConfig.options) {
-      let img = await getImage(votingConfig.options[option].name);
+      let img = await getImage(votingConfig.options[option].name).catch(()=>'');
       cards.push(
         CardFactory.heroCard(
           votingConfig.options[option].name,
