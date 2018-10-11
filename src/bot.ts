@@ -53,7 +53,7 @@ export class MyBot {
       cards.push(
         CardFactory.heroCard(
           votingConfig.options[option].name,
-          [img],
+          [img || ''],
           [
             {
               type: 'postBack',
