@@ -21,28 +21,33 @@ interface IFTImage {
 export async function getImage(query: string) {
   let url = URL + normalizeQuery(query);
 
-  const res = await axios(
-    {
-      method: "GET",
-      headers: {
-        "X-Mashape-Key": IMG_API_KEY,
-        "X-Mashape-Host": "contextualwebsearch-websearch-v1.p.mashape.com"
-      },
-      url: url
-    }
-  ).catch((e) => {
-    return {
-      data: {
-        value: [
-          {url: ''}
-        ]
+  try {
+    const res = await axios(
+      {
+        method: "GET",
+        headers: {
+          "X-Mashape-Key": IMG_API_KEY,
+          "X-Mashape-Host": "contextualwebsearch-websearch-v1.p.mashape.com"
+        },
+        url: url
       }
-    }
-  });
+    ).catch((e) => {
+      return {
+        data: {
+          value: [
+            {url: ''}
+          ]
+        }
+      }
+    });
 
-  return await (res.data.value[0] && res.data.value[0].url || '').catch(()=>'');
+    return await (res.data.value[0] && res.data.value[0].url || '').catch(()=>'');
+  } catch(e) {
+    console.log(e);
+    return '';
+  }
 }
 
 function normalizeQuery(query: string): string {
-  return query.trim().split(' ').join('+');
+  return encodeURIComponent(query.trim().split(' ').join('+'));
 }
