@@ -280,7 +280,7 @@ export class MyBot {
 
   async sendWelcomeMessage(turnContext) {
     if (turnContext.activity && turnContext.activity.membersAdded) {
-      await turnContext.sendActivity(`hello!`);
+      await turnContext.sendActivity(`Hello! I'm voting assistant. Type 'help' if you need any help`);
     }
   }
 }
