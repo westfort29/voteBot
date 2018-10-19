@@ -14,6 +14,7 @@ import { BotConfiguration, IEndpointService } from 'botframework-config';
 
 // This bot's main dialog.
 import { MyBot } from './bot';
+import { TERMS, POLICY } from './legal';
 
 // Read botFilePath and botFileSecret from .env file.
 const ENV_FILE = path.join(__dirname, '..', '.env');
@@ -101,8 +102,17 @@ server.post('/api/messages', (req, res) => {
     adapter.processActivity(req, res, async (context) => {
         // Route to main dialog.
         await myBot.onTurn(context);
-    });
-
-    
+    });  
 });
 
+server.get('/terms-of-use', (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.write(TERMS);
+    res.end();
+});
+
+server.get('/privacy-policy', (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.write(POLICY);
+    res.end();
+});

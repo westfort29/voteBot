@@ -12,7 +12,8 @@ enum VOTE_COMMANDS {
   'LAST_RESULT' = 'result',
   'REOPEN' = 'reopen',
   'RATE' = 'rate',
-  'HELP' = 'help'
+  'HELP' = 'help',
+  'SHOW' = 'show'
 }
 
 interface IVotingConfig {
@@ -132,15 +133,22 @@ export class MyBot {
           break;
         }
         case VOTE_COMMANDS.RATE: {
-          this.handleRate(userInput, turnContext);
+          await this.handleRate(userInput, turnContext);
+          break;
+        }
+        case VOTE_COMMANDS.SHOW: {
+          await this.handleShow(userInput, turnContext);
           break;
         }
         default: {
+          await turnContext.sendActivity("Sorry, I can't understand you. Type 'help' if you need any help");
           break;
         }
       }
 
       await this.votingConfig.set(turnContext, votingConfig);
+    } else if (turnContext.activity.type === ActivityTypes.ConversationUpdate) {
+      await this.sendWelcomeMessage(turnContext);
     } else {
       await turnContext.sendActivity(`[${turnContext.activity.type} event detected]`);
     }
@@ -242,6 +250,37 @@ export class MyBot {
       await turnContext.sendActivity(ratingAnswer);
     } else {
       await turnContext.sendActivity(`Nothing to rate`);
+    }
+  }
+
+  async handleShow(userInput: any[], turnContext: any) {
+    let showigSubject = userInput[1].trim();
+    if (showigSubject) {
+      let img = await getImage(showigSubject);
+      if (img) {
+        await turnContext.sendActivity(
+          {
+            text: `Here is(are) ${showigSubject}`,
+            attachments: [
+              {
+              name: showigSubject,
+              contentType: 'image/png',
+              contentUrl: img
+              }
+            ]
+          }
+        );
+      } else {
+        await turnContext.sendActivity(`Nothing to show`).catch(()=>{console.log('error')});
+      }
+    } else {
+      await turnContext.sendActivity(`Nothing to show`);
+    }
+  }
+
+  async sendWelcomeMessage(turnContext) {
+    if (turnContext.activity && turnContext.activity.membersAdded) {
+      await turnContext.sendActivity(`hello!`);
     }
   }
 }
