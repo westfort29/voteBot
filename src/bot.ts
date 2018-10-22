@@ -73,7 +73,7 @@ export class MyBot {
 
   async giveHelp(turnContext) {
     await turnContext.sendActivity(`
-      Hi. I support the following commands
+      I support the following commands
       to start voting — start!% voting_topic!% voting_option!% voting_option2 etc
       to finish voting, it will marm voting as not active, which means that no one can't vote anymore — finish
       to reopen voting — reopen
@@ -243,10 +243,10 @@ export class MyBot {
       let rating = ratingSubject.toLowerCase().trim() === this.botName ? 10 : Math.floor(Math.random() * 11);
       let ratingAnswer = `I rate ${ratingSubject} by ${rating} from 10.`;
       if (rating === 10) {
-        ratingAnswer += `\n\n ${ratingSubject} is very nice!`
+        ratingAnswer += `\n\n ${ratingSubject} is(are) very nice!`
       }
       if (rating === 0) {
-        ratingAnswer += `\n\n ${ratingSubject} sucks! Awful!`
+        ratingAnswer += `\n\n ${ratingSubject} is(are) really bad! Awful!`
       }
       await turnContext.sendActivity(ratingAnswer);
     } else {
@@ -272,7 +272,7 @@ export class MyBot {
           }
         );
       } else {
-        await turnContext.sendActivity(`Nothing to show`).catch(()=>{console.log('error')});
+        await turnContext.sendActivity(`Nothing to show with ${showigSubject}`).catch(()=>{console.log('error')});
       }
     } else {
       await turnContext.sendActivity(`Nothing to show`);
