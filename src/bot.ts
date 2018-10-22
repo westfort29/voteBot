@@ -26,7 +26,7 @@ interface IVotingConfig {
 export class MyBot {
     public conversationState;
     public votingConfig;
-    public botName = 'vote bot'
+    public botName = 'voting assistant'
   /**
    *
    * @param {ConversationState} conversation state object
@@ -78,7 +78,8 @@ export class MyBot {
       to finish voting, it will marm voting as not active, which means that no one can't vote anymore — finish
       to reopen voting — reopen
       to see result, even for not finished voting, but it won't mark voting as finished — result
-      to ask bot rate something — rate!% thing_you_want_to_rate
+      to ask me rate something — rate!% thing_you_want_to_rate
+      to ask me to show something — show!% thing_you_want_to_show
     `);
   }
 
@@ -280,7 +281,8 @@ export class MyBot {
 
   async sendWelcomeMessage(turnContext) {
     if (turnContext.activity && turnContext.activity.membersAdded) {
-      await turnContext.sendActivity(`Hello! I'm voting assistant. Type 'help' if you need any help`);
+      await turnContext.sendActivity(`Hello! I'm voting assistant. I would be pleased to help you to organize votings. Type 'help' if you need any help`);
+      await this.giveHelp(turnContext);
     }
   }
 }
