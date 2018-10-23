@@ -23,7 +23,7 @@ export async function getImage(query: string) {
     }
   ).catch(() => {
     return {
-      data {
+      data: {
         hits: [
           {
             webformatURL: ''
