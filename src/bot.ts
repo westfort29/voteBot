@@ -81,6 +81,8 @@ export class MyBot {
       to see result, even for not finished voting, but it won't mark voting as finished — result
       to ask me rate something — rate!% thing_you_want_to_rate
       to ask me to show something — show!% thing_you_want_to_show
+
+      example rate!% vote assistant
     `);
   }
 
