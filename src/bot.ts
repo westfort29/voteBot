@@ -26,7 +26,7 @@ interface IVotingConfig {
 export class MyBot {
     public conversationState;
     public votingConfig;
-    public botName = 'voting assistant'
+    public botName = 'vote assistant'
   /**
    *
    * @param {ConversationState} conversation state object
