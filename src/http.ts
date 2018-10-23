@@ -1,21 +1,17 @@
 import axios from 'axios';
 
 const IMG_API_KEY = 'vCZua7FQOHmshDmwmPLuOVEvxBJPp1vNDd5jsn9m38Zu8v89Bb';
-const URL = "https://contextualwebsearch-websearch-v1.p.mashape.com/api/Search/ImageSearchAPI?count=1&autoCorrect=true&q="
+const URL = "https://pixabay.com/api/?key=10475952-b00fff90aada76a86776caf63&safesearch=true&q=overwatch"
 
 interface IFTImageResponse {
-  _type: string;
-  value: IFTImage[];
+  totalHits: number;
+  hits: IFTImage[];
+  total: number
 }
 
 interface IFTImage {
-  url: string,
-  height: number,
-  width: number,
-  thumbnail: string,
-  thumbnailHeight: number,
-  thumbnailWidth: number,
-  base64Encoding: any
+  webformatURL: string,
+  largeImageURL: string
 }
 
 export async function getImage(query: string) {
@@ -23,21 +19,21 @@ export async function getImage(query: string) {
   const res = await axios(
     {
       method: "GET",
-      headers: {
-        "X-Mashape-Key": IMG_API_KEY,
-        "X-Mashape-Host": "contextualwebsearch-websearch-v1.p.mashape.com"
-      },
       url: url
     }
   ).catch(() => {
-    return{
-      data: {
-        value: [{url: ''}]
+    return {
+      data {
+        hits: [
+          {
+            webformatURL: ''
+          }
+        ]
       }
     }
   })
 
-    return await (res.data.value[0] && res.data.value[0].url);
+    return await (res.data.hits && res.data.hits[0].webformatURL);
 }
 
 function normalizeQuery(query: string): string {
