@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const IMG_API_KEY = 'vCZua7FQOHmshDmwmPLuOVEvxBJPp1vNDd5jsn9m38Zu8v89Bb';
-const URL = "https://pixabay.com/api/?key=10475952-b00fff90aada76a86776caf63&safesearch=true&q=overwatch"
+const URL = "https://pixabay.com/api/?key=10475952-b00fff90aada76a86776caf63&safesearch=true&q="
 
 interface IFTImageResponse {
   totalHits: number;
@@ -16,24 +16,9 @@ interface IFTImage {
 
 export async function getImage(query: string) {
   let url = URL + normalizeQuery(query);
-  const res = await axios(
-    {
-      method: "GET",
-      url: url
-    }
-  ).catch(() => {
-    return {
-      data: {
-        hits: [
-          {
-            webformatURL: ''
-          }
-        ]
-      }
-    }
-  })
-
-    return await (res.data.hits && res.data.hits[0].webformatURL);
+  return axios(url)
+  .then((data: any) => data.data.hits[0] && data.data.hits[0].webformatURL)
+  .catch(() => '')
 }
 
 function normalizeQuery(query: string): string {
