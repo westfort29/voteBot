@@ -41,13 +41,11 @@ export class MyBot {
   async detectCommand(userInput: string[]) {
     let command = userInput[0].trim();
     let arrayWithCommand = command.split(' ');
-    console.log(arrayWithCommand);
     let commandIndex = MAX_COMMAND_POSITION;
     for (let key in COMMANDS) {
       for (let i = 0; i < MAX_COMMAND_POSITION; i++) {
         if (arrayWithCommand[i]) {
           var indexOfCurrentCommand = arrayWithCommand.indexOf(COMMANDS[key]);
-          console.log(`item checked: ${arrayWithCommand[i]} command: ${COMMANDS[key]} commandIndex: ${commandIndex} indexOfCurrentCommand: ${indexOfCurrentCommand}`);
           if (indexOfCurrentCommand > -1 && indexOfCurrentCommand < MAX_COMMAND_POSITION) {
             commandIndex = indexOfCurrentCommand;
           }
@@ -58,7 +56,6 @@ export class MyBot {
       }
     }
     command = commandIndex === MAX_COMMAND_POSITION ? 'unknown' : arrayWithCommand[commandIndex];
-    console.log(command);
     return command;
   }
 
