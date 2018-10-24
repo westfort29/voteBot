@@ -131,8 +131,8 @@ export class MyBot {
     await turnContext.sendActivity(`
       To separate parts of your commands you should use !% sign combination
       I support the following commands
-      to start voting — start voting_topic!% voting_option!% voting_option2 etc
-      to finish voting, it will marm voting as not active, which means that no one can't vote anymore — finish
+      to start voting — start voting_topic!% voting_option!% voting_option2
+      to finish voting, it will mark voting as not active, which means that no one can't vote anymore — finish
       to reopen voting — reopen
       to see result, even for not finished voting, but it won't mark voting as finished — result
       to ask me rate something — rate thing_you_want_to_rate

@@ -121,9 +121,9 @@ class VotingModule {
   async handleReopen(votingConfig: IVotingConfig, turnContext: TurnContext) {
     if (!votingConfig.isActive && votingConfig.topic) {
       votingConfig.isActive = true;
-      await turnContext.sendActivity(`Voting is continuing`);
+      await turnContext.sendActivity(`Voting about ${votingConfig.topic} is continuing`);
     } else {
-      await turnContext.sendActivity(`No voting to reopen`);
+      await turnContext.sendActivity(`There is no voting to reopen`);
     }
   }
 }
