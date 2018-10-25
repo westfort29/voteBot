@@ -40,7 +40,7 @@ export class MyBot {
 
   async detectCommand(userInput: string[]) {
     let command = userInput[0].trim();
-    let arrayWithCommand = command.split(' ');
+    let arrayWithCommand = command.split(' ').map(el => el.toLowerCase());
     let commandIndex = MAX_COMMAND_POSITION;
     for (let key in COMMANDS) {
       for (let i = 0; i < MAX_COMMAND_POSITION; i++) {
