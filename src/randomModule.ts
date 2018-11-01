@@ -24,7 +24,7 @@ class RandomModule {
 
   async handlePick(userInput: string[], turnContext: TurnContext) {
     let variety = userInput.slice(1);
-    if (variety.length > 2) {
+    if (variety.length > 1) {
       let randomIndex = Math.floor(Math.random() * variety.length);
       await turnContext.sendActivity(`I pick ${variety[randomIndex].trim()}!`);
     } else {
