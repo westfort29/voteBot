@@ -5,6 +5,7 @@ import { TurnContext, ActivityTypes } from 'botbuilder';
 import { getImage } from './http';
 import { IVotingConfig } from './entities';
 import { votingHandlers } from './votingModule';
+import { randomModule } from './randomModule'
 
 const VOTING_PROPERTY = 'votingConfigProperty';
 const COMMANDS = {
@@ -15,7 +16,8 @@ const COMMANDS = {
   'REOPEN': 'reopen',
   'RATE': 'rate',
   'HELP': 'help',
-  'SHOW': 'show'
+  'SHOW': 'show',
+  'PICK': 'pick'
 };
 Object.freeze(COMMANDS);
 
@@ -24,7 +26,6 @@ const MAX_COMMAND_POSITION = 5;
 export class MyBot {
     public conversationState;
     public votingConfig;
-    public botName = 'voting assistant';
   /**
    *
    * @param {ConversationState} conversation state object
@@ -105,7 +106,11 @@ export class MyBot {
           break;
         }
         case COMMANDS.RATE: {
-          await this.handleRate(userInput, turnContext);
+          await randomModule.handleRate(userInput, turnContext);
+          break;
+        }
+        case COMMANDS.PICK: {
+          await randomModule.handlePick(userInput, turnContext);
           break;
         }
         case COMMANDS.SHOW: {
@@ -140,23 +145,6 @@ export class MyBot {
 
       example start topic!% option_1!% option2
     `);
-  }
-  
-  async handleRate(userInput: string[], turnContext: TurnContext) {
-    let ratingSubject = userInput[1].trim();
-    if (ratingSubject) {
-      let rating = ratingSubject.toLowerCase().trim() === this.botName ? 10 : Math.floor(Math.random() * 11);
-      let ratingAnswer = `I rate ${ratingSubject} by ${rating} from 10.`;
-      if (rating === 10) {
-        ratingAnswer += `\n\n ${ratingSubject} is(are) very nice!`
-      }
-      if (rating === 0) {
-        ratingAnswer += `\n\n ${ratingSubject} is(are) really bad! Awful!`
-      }
-      await turnContext.sendActivity(ratingAnswer);
-    } else {
-      await turnContext.sendActivity(`Nothing to rate`);
-    }
   }
 
   async handleShow(userInput: string[], turnContext: TurnContext) {
