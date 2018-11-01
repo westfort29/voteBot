@@ -76,7 +76,7 @@ export class MyBot {
         }
       }
 
-      let userInput = turnContext.activity.text.split('!%');
+      let userInput = turnContext.activity.text.split(';');
       let command = await this.detectCommand(userInput);
       userInput[0] = await this.getSlicedUserInput(userInput, command);
       userInput.unshift('');
@@ -134,17 +134,17 @@ export class MyBot {
 
   async giveHelp(turnContext: TurnContext) {
     await turnContext.sendActivity(`
-      To separate parts of your commands you should use !% sign combination
+      To separate parts of your commands you should use ; sign combination
       I support the following commands
-      to start voting — start voting_topic!% voting_option!% voting_option2
+      to start voting — start voting_topic; voting_option; voting_option2
       to finish voting, it will mark voting as not active, which means that no one can't vote anymore — finish
       to reopen voting — reopen
       to see result, even for not finished voting, but it won't mark voting as finished — result
       to ask me rate something — rate thing_you_want_to_rate
       to ask me to show something — show thing_you_want_to_show
-      to ask me to randomly pick from your list pick option_1!% option_2
+      to ask me to randomly pick from your list pick option_1; option_2
 
-      example start topic!% option_1!% option2
+      example start topic; option_1; option2
     `);
   }
 
