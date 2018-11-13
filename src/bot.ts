@@ -17,7 +17,8 @@ const COMMANDS = {
   'RATE': 'rate',
   'HELP': 'help',
   'SHOW': 'show',
-  'PICK': 'pick'
+  'PICK': 'pick',
+  'RANDOMIZE': 'randomize'
 };
 Object.freeze(COMMANDS);
 
@@ -113,6 +114,10 @@ export class MyBot {
           await randomModule.handlePick(userInput, turnContext);
           break;
         }
+        case COMMANDS.RANDOMIZE: {
+          await randomModule.handleRandomize(userInput, turnContext);
+          break;
+        }
         case COMMANDS.SHOW: {
           await this.handleShow(userInput, turnContext);
           break;
@@ -143,6 +148,7 @@ export class MyBot {
       to ask me rate something — rate thing_you_want_to_rate
       to ask me to show something — show thing_you_want_to_show
       to ask me to randomly pick from your list pick option_1; option_2
+      to ask me randomly generate number from: 0 to 100 — randomize, 0 to #your_number — randomize #your_number, #min to #max — randomize #min; #max
 
       example start topic; option_1; option2
     `);

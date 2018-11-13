@@ -31,6 +31,26 @@ class RandomModule {
       await turnContext.sendActivity(`There is nothing to pick from, please add some varieties`);
     }
   }
+
+  async handleRandomize(userInput: string[], turnContext: TurnContext) {
+    let variety = userInput.slice(1);
+    console.log(variety);
+    let firstInput = parseInt(variety[0]);
+    let secondInput = parseInt(variety[1]);
+    let userNameOrId = turnContext.activity.from.name || turnContext.activity.from.id
+    if (variety.length === 1 && (!firstInput || firstInput === 0)) {
+      let randomHundred = Math.floor(Math.random() * 101);
+      await turnContext.sendActivity(`${userNameOrId}, you got ${randomHundred} from 100!`);
+    } else if (variety.length === 1 && firstInput) {
+      let userRandom = Math.floor(Math.random() * (firstInput + 1));
+      await turnContext.sendActivity(`${userNameOrId}, you got ${userRandom} from ${firstInput}!`);
+    } else if (variety.length === 2 && (firstInput || firstInput === 0) && (secondInput || secondInput === 0)) {
+      let randomFromRange = Math.floor(Math.random() * (secondInput - firstInput + 1) + firstInput);
+      await turnContext.sendActivity(`${userNameOrId}, you got ${randomFromRange} from ${secondInput}!`);
+    } else {
+      await turnContext.sendActivity(`Excuse me, I can't understand you. Please type help to get help`);
+    }
+  }
 }
 
 export const randomModule = new RandomModule();

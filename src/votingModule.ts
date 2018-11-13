@@ -110,7 +110,7 @@ class VotingModule {
         }
         
       } else if (isUserVoted) {
-        let userNameOrId = turnContext.activity.from.name || votingUsersId
+        let userNameOrId = turnContext.activity.from.name || votingUsersId;
         await turnContext.sendActivity(`${userNameOrId} is a cheater, he have tried to vote twice`);
       }
     } else {
