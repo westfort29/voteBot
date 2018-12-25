@@ -1,6 +1,6 @@
 import { TurnContext, MessageFactory, CardFactory } from 'botbuilder';
-import { getImage } from './http';
-import { IVotingConfig } from './entities';
+import { getImage } from '../http';
+import { IVotingConfig } from '../entities';
 
 class VotingModule {
   async makeOptionCards(votingConfig: IVotingConfig) {
@@ -86,7 +86,7 @@ class VotingModule {
       if (wonOptionsId.length > 1) {
         wonAnounseString += '\n\n Unfortunatly some of results have same amount of votes. You can reopen current voting or start a new one.';
       } else {
-        let winStatus = votingConfig.isActive ? ' is winning ' : ' have won ';
+        let winStatus = votingConfig.isActive ? ' is winning ' : ' has won ';
         wonAnounseString += '\n\n "' + votingConfig.options[wonOptionsId[0]].name + '"' + winStatus + 'with ' + votingConfig.options[wonOptionsId[0]].votesCount + ' votes';
       }
       await turnContext.sendActivity(`The results of the voting about "${votingConfig.topic}" are: ${resultString} ${wonAnounseString}`);
@@ -111,7 +111,7 @@ class VotingModule {
         
       } else if (isUserVoted) {
         let userNameOrId = turnContext.activity.from.name || votingUsersId;
-        await turnContext.sendActivity(`${userNameOrId} is a cheater, he have tried to vote twice`);
+        await turnContext.sendActivity(`${userNameOrId} is a cheater, he(she) has tried to vote twice`);
       }
     } else {
       await turnContext.sendActivity(`There is no active voting`);

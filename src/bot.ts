@@ -4,8 +4,8 @@
 import { TurnContext, ActivityTypes } from 'botbuilder';
 import { getImage } from './http';
 import { IVotingConfig } from './entities';
-import { votingHandlers } from './votingModule';
-import { randomModule } from './randomModule'
+import { votingHandlers } from './modules/votingModule';
+import { randomModule } from './modules/randomModule'
 
 const VOTING_PROPERTY = 'votingConfigProperty';
 const COMMANDS = {

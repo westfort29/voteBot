@@ -1,5 +1,5 @@
 import { TurnContext } from 'botbuilder';
-import { BOT_NAME } from './constants';
+import { BOT_NAME } from '../constants';
 
 
 class RandomModule {
@@ -34,7 +34,6 @@ class RandomModule {
 
   async handleRandomize(userInput: string[], turnContext: TurnContext) {
     let variety = userInput.slice(1);
-    console.log(variety);
     let firstInput = parseInt(variety[0]);
     let secondInput = parseInt(variety[1]);
     let userNameOrId = turnContext.activity.from.name || turnContext.activity.from.id
