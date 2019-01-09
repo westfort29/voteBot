@@ -122,7 +122,7 @@ class VotingModule {
           }
         let userNameOrId = turnContext.activity.from.name || votingUsersId;
 
-        await turnContext.sendActivity(`${userNameOrId} changed his mind`);
+        await turnContext.sendActivity(`${userNameOrId} changed his(her) mind`);
       } else {
         await turnContext.sendActivity(`There is no such option`);
       }
