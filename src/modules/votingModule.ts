@@ -36,11 +36,11 @@ class VotingModule {
       currentVotingConfig.topic = topic;
       let votingOptions = userInputConfig.slice(2);
       votingOptions.forEach((element, index) => {
-        if(element.trim()){
+        if (element.trim()){
           currentVotingConfig.options[index] = {
             id: index,
             name: element.trim(),
-            votesCount: 0
+            usersVoted: []
           }
         }
       });
@@ -73,7 +73,7 @@ class VotingModule {
       let maxVotesCount = 0;
       let wonOptionsId = [];
       for (let option in votingConfig.options) {
-        let optionVotesCount = votingConfig.options[option].votesCount
+        let optionVotesCount = votingConfig.options[option].usersVoted.length;
         resultString += '\n\n ' + votingConfig.options[option].name + ' has ' + optionVotesCount + ' vote(s)';
         if (maxVotesCount < optionVotesCount) {
           wonOptionsId = [option];
@@ -87,7 +87,7 @@ class VotingModule {
         wonAnounseString += '\n\n Unfortunatly some of results have same amount of votes. You can reopen current voting or start a new one.';
       } else {
         let winStatus = votingConfig.isActive ? ' is winning ' : ' has won ';
-        wonAnounseString += '\n\n "' + votingConfig.options[wonOptionsId[0]].name + '"' + winStatus + 'with ' + votingConfig.options[wonOptionsId[0]].votesCount + ' votes';
+        wonAnounseString += '\n\n "' + votingConfig.options[wonOptionsId[0]].name + '"' + winStatus + 'with ' + votingConfig.options[wonOptionsId[0]].usersVoted.length + ' votes';
       }
       await turnContext.sendActivity(`The results of the voting about "${votingConfig.topic}" are: ${resultString} ${wonAnounseString}`);
     } else {
@@ -99,19 +99,32 @@ class VotingModule {
     if (votingConfig.isActive) {
       let votedOptionId = userInput[1].trim();
       let votingUsersId = turnContext.activity.from.id;
-      let isUserVoted =  votingConfig.votedUsersId.some(userId => userId == votingUsersId)
-      if (votedOptionId && !isUserVoted) {
+      let previousVoteOption = Object.keys(votingConfig.options).find(
+        key => votingConfig.options[key].usersVoted.some(
+          votedUserId => votedUserId === votingUsersId
+        )
+      );
+      if (votedOptionId && !previousVoteOption) {
         votedOptionId = parseInt(votedOptionId);
         if (votingConfig.options[votedOptionId]) {
-          votingConfig.options[votedOptionId].votesCount++;
-          votingConfig.votedUsersId.push(votingUsersId);
+          votingConfig.options[votedOptionId].usersVoted.push(votingUsersId);
         } else {
           await turnContext.sendActivity(`There is no such option`);
         }
-        
-      } else if (isUserVoted) {
+
+      } else if (previousVoteOption && votedOptionId) {
+          votedOptionId = parseInt(votedOptionId);
+          if (votingConfig.options[votedOptionId]) {
+            votingConfig.options[votedOptionId].usersVoted.push(votingUsersId);
+            votingConfig.options[previousVoteOption].usersVoted.splice(votingConfig.options[previousVoteOption].usersVoted.findIndex(el => el === votingUsersId), 1);
+          } else {
+            await turnContext.sendActivity(`There is no such option`);
+          }
         let userNameOrId = turnContext.activity.from.name || votingUsersId;
-        await turnContext.sendActivity(`${userNameOrId} is a cheater, he(she) has tried to vote twice`);
+
+        await turnContext.sendActivity(`${userNameOrId} changed his mind`);
+      } else {
+        await turnContext.sendActivity(`There is no such option`);
       }
     } else {
       await turnContext.sendActivity(`There is no active voting`);
