@@ -3,11 +3,11 @@
     "services": [
         {
             "type": "endpoint",
-            "name": "voteBot",
+            "name": "development",
             "endpoint": "http://localhost:3978/api/messages",
-            "appId": "319cfb5f-ce1a-46c4-a778-e90760c16b88",
+            "appId": "",
             "appPassword": "",
-            "id": "319cfb5f-ce1a-46c4-a778-e90760c16b88"
+            "id": ""
         }
     ],
     "padlock": "",

@@ -1,0 +1,13 @@
+{
+  "extends": "tslint:recommended",
+  "project": "./tsconfig.json",
+  "rules": {
+    "curly": true,
+    "trailing-comma": false
+  },
+  "jsRules": {
+    "curly": true
+  },
+  "rulesDirectory": [
+  ]
+}
