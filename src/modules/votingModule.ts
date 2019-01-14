@@ -49,7 +49,6 @@ class VotingModule {
           };
         }
       });
-      currentVotingConfig.votedUsersId = [];
       let optionsList = "";
       for (const option of Object.keys(currentVotingConfig.options)) {
         optionsList += "\n\n " + currentVotingConfig.options[option].id +
@@ -120,31 +119,21 @@ class VotingModule {
           (votedUserId) => votedUserId === votingUsersId
         )
       );
-      if (votedOptionId && !previousVoteOption) {
-        votedOptionId = parseInt(votedOptionId, 10);
-        if (votingConfig.options[votedOptionId]) {
-          votingConfig.options[votedOptionId].usersVoted.push(votingUsersId);
-        } else {
-          await turnContext.sendActivity(`There is no such option`);
-        }
-
-      } else if (previousVoteOption && votedOptionId) {
-          votedOptionId = parseInt(votedOptionId, 10);
-          if (votingConfig.options[votedOptionId]) {
-            votingConfig.options[votedOptionId].usersVoted.push(votingUsersId);
-            votingConfig.options[previousVoteOption].usersVoted.splice(
-              votingConfig.options[previousVoteOption].usersVoted.findIndex(
-                (el) => el === votingUsersId
-              ), 1
-            );
-          } else {
-            await turnContext.sendActivity(`There is no such option`);
-          }
-          const userNameOrId = turnContext.activity.from.name || votingUsersId;
-
-          await turnContext.sendActivity(`${userNameOrId} changed his(her) mind`);
-        } else {
+      if (!votedOptionId || !votingConfig.options[votedOptionId]) {
         await turnContext.sendActivity(`There is no such option`);
+      } else if (!previousVoteOption) {
+        votedOptionId = parseInt(votedOptionId, 10);
+        votingConfig.options[votedOptionId].usersVoted.push(votingUsersId);
+      } else if (previousVoteOption) {
+        votedOptionId = parseInt(votedOptionId, 10);
+        votingConfig.options[votedOptionId].usersVoted.push(votingUsersId);
+        votingConfig.options[previousVoteOption].usersVoted.splice(
+          votingConfig.options[previousVoteOption].usersVoted.findIndex(
+            (el) => el === votingUsersId
+          ), 1
+        );
+        const userNameOrId = turnContext.activity.from.name || votingUsersId;
+        await turnContext.sendActivity(`${userNameOrId} changed his(her) mind`);
       }
     } else {
       await turnContext.sendActivity(`There is no active voting`);

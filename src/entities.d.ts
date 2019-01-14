@@ -2,7 +2,6 @@ export interface IVotingConfig {
   topic: string;
   options: IVotingOptions;
   isActive: boolean;
-  votedUsersId: string[];
 }
 
 export interface IVotingOptions {

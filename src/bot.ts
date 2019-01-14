@@ -25,8 +25,7 @@ export class MyBot {
         votingConfig = {
           isActive: false,
           options: {},
-          topic: "",
-          votedUsersId: []
+          topic: ""
         };
       }
 
